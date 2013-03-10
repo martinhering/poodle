@@ -1,0 +1,3 @@
+[submodule "frontend/Elastica"]
+	path = frontend/Elastica
+	url = https://martinhering@github.com/ruflin/Elastica.git

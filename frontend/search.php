@@ -5,8 +5,8 @@ include_once('config.php');
 function __autoload_elastica ($class) {
 	$path = str_replace('_', '/', $class);
 
-	if (file_exists($INSTALLTION_PATH . $path . '.php')) {
-	require_once($INSTALLTION_PATH . $path . '.php');
+	if (file_exists($ELASTICA_DIR_PATH . $path . '.php')) {
+	require_once($ELASTICA_DIR_PATH . $path . '.php');
 	}
 }
 spl_autoload_register('__autoload_elastica');

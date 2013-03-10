@@ -1,6 +1,6 @@
 <?php
 
-$INSTALLTION_PATH = '/var/www/';
+$ELASTICA_DIR_PATH = '/var/www/Elastica/lib/Elastica';
 $SEARCH_CLUSTER = array(
     'servers' => array(
         array('host' => 'localhost', 'port' => 9200)
