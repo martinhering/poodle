@@ -1,16 +1,19 @@
 <?php
 
-include_once('config.php');
-
 function __autoload_elastica ($class) {
-	$path = str_replace('_', '/', $class);
 
-	if (file_exists($ELASTICA_DIR_PATH . $path . '.php')) {
-	require_once($ELASTICA_DIR_PATH . $path . '.php');
+	include('config.php');
+	
+	$path = str_replace('_', '/', $class);
+	$class_path = $INSTALLATION_DIR_PATH . '/Elastica/lib/' . $path . '.php';
+	
+	if (file_exists($class_path)) {
+		require_once($class_path);
 	}
 }
 spl_autoload_register('__autoload_elastica');
 
+include('config.php');
 
 function truncate_string($string, $max_length)
 {
@@ -80,13 +83,13 @@ function find_sliding_emphasize_window($string, $snippets, $window_size) {
 }
 
 
-function logSearch($query, $lang)
+function logSearch($path, $query, $lang)
 {
 	$day = date("Y-m-d");
 	$ip = $_SERVER['REMOTE_ADDR'];
 	$now = date("Y-m-d H:i:s O");
 
-	$fd = fopen("$LOG_DIR_PATH/search-$day.log", "a");
+	$fd = fopen($path."/search-$day.log", "a");
 	fwrite($fd, "$now|$ip|$query|$lang\n");
 	fclose($fd);
 }
@@ -110,7 +113,7 @@ $q = stripslashes($_GET["q"]);
 $lang = stripslashes($_GET["lang"]);
 
 if (strlen($q) > 0) {
-	logSearch($q, $lang);
+	logSearch($LOG_DIR_PATH, $q, $lang);
 }
 
 
@@ -118,7 +121,7 @@ if (strlen($q) > 0) {
 $searchTerm = (strlen($q) > 0) ? $q : 'instacast';
 $langTerm = (strlen($lang) > 0) ? $lang : getLangCode();
 
-$elasticaClient = new Elastica_Client($SEARCH_CLUSTER);
+$elasticaClient = new Elastica_Client(array('servers' => $SEARCH_CLUSTER));
 
 $elasticaIndex = $elasticaClient->getIndex($langTerm);
 $elasticaQuery 		= new Elastica_Query();
